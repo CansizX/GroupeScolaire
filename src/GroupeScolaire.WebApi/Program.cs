@@ -1,3 +1,9 @@
+using GroupeScolaire.Application.Common.Interfaces;
+using GroupeScolaire.Infrastructure.Persistence;
+using GroupeScolaire.Infrastructure.Persistence.Repositories;
+using GroupeScolaire.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,6 +26,14 @@ var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantProvider, TenantProvider>();
+
+builder.Services.AddDbContext<TenantsDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TenantsDb")));
+
+builder.Services.AddScoped<ITenantsRepository, TenantsRepository>();
 
 app.MapGet("/weatherforecast", () =>
 {
