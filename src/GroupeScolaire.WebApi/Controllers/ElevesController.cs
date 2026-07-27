@@ -1,4 +1,5 @@
 ﻿using GroupeScolaire.Application.Eleves.Commands.CreateEleve;
+using GroupeScolaire.Application.Eleves.Queries.GetElevesByClasse;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,5 +21,11 @@ public class ElevesController : ControllerBase
     {
         var id = await _mediator.Send(command);
         return Ok(new { id });
+    }
+    [HttpGet("classe/{classeId}")]
+    public async Task<IActionResult> GetByClasse(Guid classeId)
+    {
+        var eleves = await _mediator.Send(new GetElevesByClasseQuery(classeId));
+        return Ok(eleves);
     }
 }
