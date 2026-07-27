@@ -1,20 +1,21 @@
-using System;
+using GroupeScolaire.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace GroupeScolaire.Infrastructure.Persistence;
 
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<TenantsDbContext>
+public class EtablissementDesignTimeDbContextFactory : IDesignTimeDbContextFactory<EtablissementDbContext>
 {
-    public TenantsDbContext CreateDbContext(string[] args)
+    public EtablissementDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<TenantsDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<EtablissementDbContext>();
 
-        var connectionString = Environment.GetEnvironmentVariable("TENANTS_DB_CONNECTION")
-                               ?? "Server=localhost,1433;Database=TenantsDb;User Id=sa;Password=Passe_Code123!;TrustServerCertificate=True";
+        // Connection string "modèle" juste pour générer la migration —
+        // sera remplacée dynamiquement à l'exécution par le tenant
+        var connectionString = "Server=localhost,1433;Database=Etablissement_Template_Db;User Id=sa;Password=Passe_Code123!;TrustServerCertificate=True";
 
         optionsBuilder.UseSqlServer(connectionString);
 
-        return new TenantsDbContext(optionsBuilder.Options);
+        return new EtablissementDbContext(optionsBuilder.Options);
     }
 }

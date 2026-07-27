@@ -1,4 +1,5 @@
 using GroupeScolaire.Application.Common.Interfaces;
+using GroupeScolaire.Application.Eleves.Commands.CreateEleve;
 using GroupeScolaire.Infrastructure.Persistence;
 using GroupeScolaire.Infrastructure.Persistence.Repositories;
 using GroupeScolaire.Infrastructure.Services;
@@ -9,16 +10,32 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddControllers();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
+// BD maître (Tenants)
 builder.Services.AddDbContext<TenantsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TenantsDb")));
 
 builder.Services.AddScoped<ITenantsRepository, TenantsRepository>();
+
+// BD applicative (par tenant, résolue dynamiquement)
+builder.Services.AddScoped<IEtablissementDbContext>(sp =>
+{
+    var tenantProvider = sp.GetRequiredService<ITenantProvider>();
+    var connectionString = tenantProvider.ConnectionString
+        ?? throw new InvalidOperationException("Tenant introuvable ou non spécifié.");
+
+    var options = new DbContextOptionsBuilder<EtablissementDbContext>()
+        .UseSqlServer(connectionString)
+        .Options;
+
+    return new EtablissementDbContext(options);
+});
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateEleveCommand).Assembly));
 
 var app = builder.Build();
 
@@ -33,28 +50,4 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
