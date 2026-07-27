@@ -1,9 +1,10 @@
-﻿using GroupeScolaire.Domain.Entities;
+﻿using GroupeScolaire.Application.Common.Interfaces;
+using GroupeScolaire.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroupeScolaire.Infrastructure.Persistence;
 
-public class EtablissementDbContext : DbContext
+public class EtablissementDbContext : DbContext , IEtablissementDbContext
 {
     public EtablissementDbContext(DbContextOptions<EtablissementDbContext> options) : base(options) { }
 

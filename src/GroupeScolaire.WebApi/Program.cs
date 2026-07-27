@@ -1,4 +1,5 @@
 using GroupeScolaire.Application.Common.Interfaces;
+using GroupeScolaire.Application.Eleves.Commands.CreateEleve;
 using GroupeScolaire.Infrastructure.Persistence;
 using GroupeScolaire.Infrastructure.Persistence.Repositories;
 using GroupeScolaire.Infrastructure.Services;
@@ -21,7 +22,7 @@ builder.Services.AddDbContext<TenantsDbContext>(options =>
 builder.Services.AddScoped<ITenantsRepository, TenantsRepository>();
 
 // BD applicative (par tenant, résolue dynamiquement)
-builder.Services.AddScoped<EtablissementDbContext>(sp =>
+builder.Services.AddScoped<IEtablissementDbContext>(sp =>
 {
     var tenantProvider = sp.GetRequiredService<ITenantProvider>();
     var connectionString = tenantProvider.ConnectionString
@@ -33,6 +34,8 @@ builder.Services.AddScoped<EtablissementDbContext>(sp =>
 
     return new EtablissementDbContext(options);
 });
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateEleveCommand).Assembly));
 
 var app = builder.Build();
 
