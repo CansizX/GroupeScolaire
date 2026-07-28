@@ -7,8 +7,6 @@ public class PresenceHub : Hub
     public override async Task OnConnectedAsync()
     {
         var tenantId = Context.GetHttpContext()?.Request.Query["tenantId"].FirstOrDefault()?.ToLowerInvariant();
-        Console.WriteLine($"[DEBUG] Client connecté, ajouté au groupe: '{tenantId}'");
-
         if (!string.IsNullOrEmpty(tenantId))
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, tenantId);
