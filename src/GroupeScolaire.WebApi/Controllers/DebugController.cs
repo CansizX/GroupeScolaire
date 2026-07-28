@@ -1,10 +1,12 @@
 ﻿using GroupeScolaire.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroupeScolaire.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DebugController : ControllerBase
 {
     private readonly ITenantProvider _tenantProvider;
