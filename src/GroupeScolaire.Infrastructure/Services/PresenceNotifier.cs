@@ -15,7 +15,6 @@ public class PresenceNotifier : IPresenceNotifier
 
     public async Task NotifyPresenceCreated(string tenantId, Guid presenceId, Guid personneId, string statut)
     {
-        Console.WriteLine($"[DEBUG] Envoi notification au groupe: '{tenantId}'");
         await _hubContext.Clients.Group(tenantId).SendAsync("PresenceCreated", new
         {
             presenceId,
