@@ -1,4 +1,5 @@
 ﻿using GroupeScolaire.Application.Presences.Commands.CreatePresence;
+using GroupeScolaire.Application.Presences.Queries.GetPresencesByPersonne;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,5 +21,11 @@ public class PresencesController : ControllerBase
     {
         var id = await _mediator.Send(command);
         return Ok(new { id });
+    }
+    [HttpGet("personne/{personneId}")]
+    public async Task<IActionResult> GetByPersonne(Guid personneId)
+    {
+        var presences = await _mediator.Send(new GetPresencesByPersonneQuery(personneId));
+        return Ok(presences);
     }
 }
