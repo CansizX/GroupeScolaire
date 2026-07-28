@@ -19,6 +19,7 @@ public class ElevesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Direction")]
     public async Task<IActionResult> Create(CreateEleveCommand command)
     {
         var id = await _mediator.Send(command);
