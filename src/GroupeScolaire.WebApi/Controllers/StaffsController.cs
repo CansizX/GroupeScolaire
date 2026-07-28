@@ -1,12 +1,14 @@
 ﻿using GroupeScolaire.Application.Staffs.Commands.CreateStaff;
 using GroupeScolaire.Application.Staffs.Queries.GetStaffsByRole;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroupeScolaire.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class StaffsController : ControllerBase
 {
     private readonly IMediator _mediator;

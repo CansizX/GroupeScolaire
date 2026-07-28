@@ -17,8 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ITenantProvider, TenantProvider>();
-
+builder.Services.AddScoped<ITenantProvider, JwtTenantProvider>();
 // BD maître (Tenants)
 builder.Services.AddDbContext<TenantsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TenantsDb")));

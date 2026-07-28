@@ -1,12 +1,14 @@
 ﻿using GroupeScolaire.Application.Eleves.Commands.CreateEleve;
 using GroupeScolaire.Application.Eleves.Queries.GetElevesByClasse;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroupeScolaire.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ElevesController : ControllerBase
 {
     private readonly IMediator _mediator;

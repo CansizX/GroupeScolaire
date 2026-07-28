@@ -1,12 +1,14 @@
 ﻿using GroupeScolaire.Application.Presences.Commands.CreatePresence;
 using GroupeScolaire.Application.Presences.Queries.GetPresencesByPersonne;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroupeScolaire.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PresencesController : ControllerBase
 {
     private readonly IMediator _mediator;
