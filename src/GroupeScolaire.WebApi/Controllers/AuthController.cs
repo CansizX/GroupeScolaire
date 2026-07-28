@@ -17,16 +17,17 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
-    public record LoginRequest(string Username, Guid TenantId);
+    public record LoginRequest(string Username, string Role, Guid TenantId);
 
     [HttpPost("login")]
     public IActionResult Login(LoginRequest request)
     {
         var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, request.Username),
-            new Claim("tenantId", request.TenantId.ToString().ToLowerInvariant())
-        };
+  {
+        new Claim(ClaimTypes.Name, request.Username),
+        new Claim(ClaimTypes.Role, request.Role),
+        new Claim("tenantId", request.TenantId.ToString().ToLowerInvariant())
+    };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
