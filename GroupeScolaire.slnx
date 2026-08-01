@@ -5,5 +5,8 @@
     <Project Path="src/GroupeScolaire.Infrastructure/GroupeScolaire.Infrastructure.csproj" />
     <Project Path="src/GroupeScolaire.WebApi/GroupeScolaire.WebApi.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/GroupeScolaire.Application.Tests/GroupeScolaire.Application.Tests.csproj" />
+  </Folder>
   <Project Path="GroupeScolaire/GroupeScolaire.csproj" />
 </Solution>
